@@ -69,31 +69,54 @@
     </form>
 
     <section id="error-btns">
-      <button>Console Log</button>
-      <button>Console Error</button>
-      <button>Console Count</button>
-      <button>Console Warn</button>
-      <button>Console Assert</button>
-      <button>Console Clear</button>
-      <button>Console Dir</button>
-      <button>Console dirxml</button>
-      <button>Console Group Start</button>
-      <button>Console Group End</button>
-      <button>Console Table</button>
-      <button>Start Timer</button>
-      <button>End Timer</button>
-      <button>Console Trace</button>
-      <button>Trigger a Global Error</button>
+      <button id="console-log">Console Log</button>
+      <button id="console-error">Console Error</button>
+      <button id="console-count">Console Count</button>
+      <button id="console-warn">Console Warn</button>
+      <button id="console-assert">Console Assert</button>
+      <button id="console-clear">Console Clear</button>
+      <button id="console-dir">Console Dir</button>
+      <button id="console-dirxml">Console dirxml</button>
+      <button id="console-group-start">Console Group Start</button>
+      <button id="console-group-end">Console Group End</button>
+      <button id="console-table">Console Table</button>
+      <button id="start-timer">Start Timer</button>
+      <button id="end-timer">End Timer</button>
+      <button id="console-trace">Console Trace</button>
+      <button id="global-error">Trigger a Global Error</button>
     </section>
   </main>
-
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
   <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "1bfa997851a64511a08ec648430527af"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+  <script>
+    class NonNumberError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "NonNumberError";
+      }
+    }
+
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
       let output = document.querySelector('output');
       let firstNum = document.querySelector('#first-num').value;
+      try {
+        eval(`${firstNum}`);
+      } catch (err) {
+        throw err;
+      }
       let secondNum = document.querySelector('#second-num').value;
+      try {
+        eval(`${secondNum}`);
+      } catch (err) {
+        throw new NonNumberError("Second number input is not a number");
+      }
       let operator = document.querySelector('#operator').value;
       output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
     });
@@ -102,6 +125,100 @@
 
     // Start your code here
     // You may move this JS to another file if you wish
+    const consoleLogButton = document.getElementById("console-log");
+    consoleLogButton.addEventListener('click', function() {
+      console.log("Console Log Demo");
+    });
+
+    const consoleErrorButton = document.getElementById("console-error");
+    consoleErrorButton.addEventListener('click', function() {
+      console.error("Console Error Demo");
+    });
+
+    const consoleCountButton = document.getElementById("console-count");
+    consoleCountButton.addEventListener('click', function() {
+      console.count('Count Button');
+    });
+
+    const consoleWarnButton = document.getElementById("console-warn");
+    consoleWarnButton.addEventListener('click', function() {
+      console.warn('Console Warn Button');
+    });
+
+    const consoleAssertButton = document.getElementById("console-assert");
+    consoleAssertButton.addEventListener('click', function() {
+      const number = 2;
+      const errorMsg = 'The number does not equal 1';
+      console.assert(number === 1, {number, errorMsg});
+    });
+
+    const consoleClearButton = document.getElementById("console-clear");
+    consoleClearButton.addEventListener('click', function() {
+      console.clear('Console was cleared');
+    });
+
+    const consoleDirButton = document.getElementById("console-dir");
+    consoleDirButton.addEventListener('click', function() {
+      console.dir(consoleDirButton);
+    });
+
+    const consoleDirxmlButton = document.getElementById("console-dirxml");
+    consoleDirxmlButton.addEventListener('click', function() {
+      console.dirxml(consoleDirxmlButton);
+    });
+
+    const consoleGroupStartButton = document.getElementById("console-group-start");
+    consoleGroupStartButton.addEventListener('click', function() {
+      console.group('console.group');
+    });
+
+    const consoleGroupEndButton = document.getElementById("console-group-end");
+    consoleGroupEndButton.addEventListener('click', function() {
+      console.groupEnd();
+    });
+
+    const consoleTableButton = document.getElementById("console-table");
+    consoleTableButton.addEventListener('click', function() {
+      console.table([
+        {
+          name: 'Software Engineering',
+          num: 150
+        },
+        {
+          name: 'Programming Languages',
+          num: 150
+        },
+        {
+          name: 'Advanced Software Engineering',
+          num: 152
+        }
+      ]);
+    });
+
+    const startTimerButton = document.getElementById("start-timer");
+    startTimerButton.addEventListener('click', function() {
+      console.time("Timer Button");
+    });
+
+    const endTimerButton = document.getElementById("end-timer");
+    endTimerButton.addEventListener('click', function() {
+      console.timeEnd("Timer Button");
+    });
+
+    const consoleTraceButton = document.getElementById("console-trace");
+    consoleTraceButton.addEventListener('click', function() {
+      console.trace();
+    });
+
+    const globalErrorButton = document.getElementById("global-error");
+    globalErrorButton.addEventListener('click', function() {
+      const trigger = 1;
+      trigger = 2;
+    });
+
+    window.addEventListener('error', function() {
+      console.log('Sadly an error happened my friend');
+    });
   </script>
 </body>
 
